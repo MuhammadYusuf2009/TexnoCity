@@ -41,6 +41,16 @@
       "country": "india",
       "address": "user",
       "gender": "female"
+    },
+    {
+      "id": "good",
+      "name": "good",
+      "password": "good",
+      "email": "good@gmail.com",
+      "phone": "good",
+      "country": "Uzbekiston",
+      "address": "good",
+      "gender": "male"
     }
   ],
   "roleaccess": [
