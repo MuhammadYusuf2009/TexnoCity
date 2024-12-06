@@ -31,7 +31,8 @@ const Appheader = () => {
             {showmenu &&
                 <div className="header">
                     <Link to={'/'}>Home</Link>
-                    {userrole === 'admin' && <Link to={'/customer'}>Customer</Link>} {/* Admin uchun ko'rsatiladi */}
+                    {userrole === 'admin' && <Link to={'/users__data_code'}>Users</Link>} {/* Admin uchun ko'rsatiladi */}
+                    {userrole === 'admin' && <Link to={'/customer_code_custom'}>Customer</Link>} {/* Admin uchun ko'rsatiladi */}
                     <span style={{ marginLeft: '70%' }}>Welcome <b>{displayusername}</b></span>
                     <Link style={{ float: 'right' }} to={'/login'}>Logout</Link>
                 </div>
