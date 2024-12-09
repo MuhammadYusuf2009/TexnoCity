@@ -9,14 +9,14 @@ export const UserProvider = ({ children }) => {
 
         const savedUserdata = localStorage.getItem("userdata");
         return savedUserdata ? JSON.parse(savedUserdata) : {
-            user: [  
+            user: [
                 {
                     id: "MuhammadYusuf",
                     name: "Qodirov",
                     password: "admin",
                     email: "kodirovmy122109@gmail.com",
                     phone: "505003950",
-                    country: "India",
+                    country: "Uzbekiston",
                     address: "dsadad",
                     role: "admin",
                     gender: "female",
@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
                     password: "admin",
                     email: "test@gamil.com",
                     phone: "505003950",
-                    country: "India",
+                    country: "Uzbekiston",
                     address: "dsadad",
                     role: "admin",
                     gender: "female",
