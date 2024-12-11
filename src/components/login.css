@@ -6,6 +6,7 @@
     box-sizing: border-box;
     font-family: "Poppins", serif;
     font-weight: 500;
+    overflow: hidden;
 }
 
 .login__header {
@@ -24,7 +25,7 @@
     position: relative;
 }
 
-.login__imgcard {
+/* .login__imgcard {
     width: 700px;
     height: 660px;
     background-image: url('./img/login__texno.jpg');
@@ -36,7 +37,7 @@
     margin-top: 20px;
     margin-right: 20px;
     position: absolute;
-}
+} */
 
 .login__form__card {
     max-width: 480px;
