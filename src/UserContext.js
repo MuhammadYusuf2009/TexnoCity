@@ -1,13 +1,12 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-
 const UserContext = createContext();
-
 
 export const UserProvider = ({ children }) => {
     const [userdata, setUserdata] = useState(() => {
 
         const savedUserdata = localStorage.getItem("userdata");
+
         return savedUserdata ? JSON.parse(savedUserdata) : {
             user: [
                 {
@@ -21,6 +20,7 @@ export const UserProvider = ({ children }) => {
                     role: "admin",
                     gender: "female",
                 },
+
                 {
                     id: "Biloliddin",
                     name: "Ganiyev",
@@ -32,6 +32,7 @@ export const UserProvider = ({ children }) => {
                     role: "admin",
                     gender: "female",
                 },
+
             ],
             roleaccess: [
                 {
@@ -42,12 +43,17 @@ export const UserProvider = ({ children }) => {
                     havedelete: true,
                     id: "e920",
                 },
+
             ],
+
         };
+
     });
 
     useEffect(() => {
+
         localStorage.setItem("userdata", JSON.stringify(userdata));
+
     }, [userdata]);
 
     return (
