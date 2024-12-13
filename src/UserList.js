@@ -4,9 +4,7 @@ import { useUserContext } from './UserContext';
 const UserList = () => {
     const { userdata, setUserdata } = useUserContext();
 
-    // Foydalanuvchini o'chirish uchun funksiya
     const handleDelete = (id) => {
-        // O'chirishdan oldin tasdiq olish
         if (window.confirm("Are you sure you want to delete this user?")) {
             const updatedUsers = userdata.user.filter(user => user.id !== id);
             setUserdata({

@@ -8,7 +8,7 @@ import Login from './Login';
 import Register from './Register';
 import Customer from './Customer';
 import UserList from './UserList';
-
+import Data from './components/data/data';
 function App() {
     return (
         <UserProvider>
@@ -22,6 +22,7 @@ function App() {
                         <Route path="/register" element={<Register />} />
                         <Route path="/customer_code_custom" element={<Customer />} />
                         <Route path="/users__data_code" element={<UserList />} />
+                        <Route path="/data_card/:name-:id" element={<Data />} />
                     </Routes>
                 </BrowserRouter>
             </div>

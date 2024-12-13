@@ -11,9 +11,9 @@ const Customer = () => {
     const [haveremove, removechange] = useState(false);
     const [haveupdate, updatedText] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [formData, setFormData] = useState({ name: "", price: "", image: "" });
-    const [updateIndex, setUpdateIndex] = useState(null); // Track item for update
-
+    const [formData, setFormData] = useState({ id: "", name: "", price: "", image: "", mudatlitolov: '' });
+    const [updateIndex, setUpdateIndex] = useState(null);
+    const [lastId, setLastId] = useState(999);
     const navigate = useNavigate();
     const { userdata } = useUserContext();
 
@@ -48,7 +48,9 @@ const Customer = () => {
     const loadcustomer = useCallback(() => {
         const storedCustomerList = localStorage.getItem('custlist');
         if (storedCustomerList) {
-            custupdate(JSON.parse(storedCustomerList));
+            const customerList = JSON.parse(storedCustomerList);
+            custupdate(customerList);
+            setLastId(Math.max(...customerList.map(item => parseInt(item.id)), 1000)); 
         } else {
             fetch("http://localhost:8000/customer")
                 .then(res => {
@@ -59,6 +61,7 @@ const Customer = () => {
                 })
                 .then(res => {
                     custupdate(res);
+                    setLastId(Math.max(...res.map(item => parseInt(item.id)), 1000));  
                     localStorage.setItem('custlist', JSON.stringify(res));
                 });
         }
@@ -78,21 +81,23 @@ const Customer = () => {
     const handleSave = () => {
         const { name, price, image } = formData;
         if (name && price && image) {
-            const item = { name, price, image };
+            const newId = (lastId + 1).toString();  
+            const item = { id: newId, name, price, image };
             const updatedList = [...custlist, item];
             custupdate(updatedList);
             localStorage.setItem('custlist', JSON.stringify(updatedList));
+            setLastId(lastId + 1);  
             setShowModal(false);
-            setFormData({ name: "", price: "", image: "" });
+            setFormData({ id: "", name: "", price: "", image: "" });
             toast.success('Item added successfully!');
         } else {
             toast.warning('All fields are required!');
         }
     };
 
-    const handleDelete = (index) => {
+    const handleDelete = (id) => {
         if (!haveremove) {
-            const updatedList = custlist.filter((_, i) => i !== index);
+            const updatedList = custlist.filter(item => item.id !== id);
             custupdate(updatedList);
             localStorage.setItem('custlist', JSON.stringify(updatedList));
             toast.success('Item deleted successfully!');
@@ -104,24 +109,25 @@ const Customer = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleUpdate = (index) => {
+    const handleUpdate = (id) => {
         if (!haveupdate) {
-            const itemToUpdate = custlist[index];
-            setFormData({ name: itemToUpdate.name, price: itemToUpdate.price, image: itemToUpdate.image });
-            setUpdateIndex(index);
+            const itemToUpdate = custlist.find(item => item.id === id);
+            setFormData({ ...itemToUpdate });
+            setUpdateIndex(id);
             setShowModal(true);
         }
     };
 
     const handleUpdateSave = () => {
-        const { name, price, image } = formData;
+        const { name, price, image, id } = formData;
         if (name && price && image && updateIndex !== null) {
-            const updatedList = [...custlist];
-            updatedList[updateIndex] = { name, price, image };  // Update the item
+            const updatedList = custlist.map(item =>
+                item.id === updateIndex ? { id, name, price, image } : item
+            );
             custupdate(updatedList);
             localStorage.setItem('custlist', JSON.stringify(updatedList));
             setShowModal(false);
-            setFormData({ name: "", price: "", image: "" });
+            setFormData({ id: "", name: "", price: "", image: "" });
             setUpdateIndex(null);
             toast.success('Item updated successfully!');
         } else {
@@ -134,12 +140,13 @@ const Customer = () => {
             <div className="card">
                 <div className="card-header">
                     <h3>Customer Listing</h3>
+
                 </div>
                 <div className="card-body">
                     <button onClick={handleadd} className="btn btn-success">Add (+)</button>
                     <div style={{ marginTop: "20px" }}>
-                        {custlist.map((item, index) => (
-                            <div key={index} style={{
+                        {custlist.map((item) => (
+                            <div key={item.id} style={{
                                 border: "1px solid #ccc",
                                 padding: "10px",
                                 marginBottom: "10px",
@@ -150,12 +157,14 @@ const Customer = () => {
                             }}>
                                 <div>
                                     <h4>{item.name}</h4>
-                                    <p>Price: {Intl.NumberFormat().format(item.price)} UZS</p>
+
+                                    <p>Price: {Intl.NumberFormat().format(item.price)} So`m</p>
+                                    <p>{Intl.NumberFormat().format((item.price / 29).toFixed(0))} So`m</p>
                                     <img src={item.image} alt={item.name} style={{ maxWidth: "100px", maxHeight: "100px" }} />
                                 </div>
                                 <div>
-                                    <button onClick={() => handleUpdate(index)} className="btn btn-warning">Update</button>
-                                    <button onClick={() => handleDelete(index)} className="btn btn-danger">Delete</button>
+                                    <button onClick={() => handleUpdate(item.id)} className="btn btn-warning">Update</button>
+                                    <button onClick={() => handleDelete(item.id)} className="btn btn-danger">Delete</button>
                                 </div>
                             </div>
                         ))}
@@ -163,6 +172,7 @@ const Customer = () => {
                 </div>
             </div>
 
+            {/* Modal for Adding or Updating */}
             {showModal && (
                 <div className="modal" style={{
                     position: "fixed",
